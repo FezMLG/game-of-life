@@ -24,67 +24,16 @@ export class Board {
     return this;
   }
 
-  // createNewCells() {
-  //   const bbb = this.board;
-  //   const checkUpperLevel = (i: number, j: number) => {
-  //     let numOfNeighbors = 0;
-  //     if (bbb[i - 1][j - 1] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     if (bbb[i - 1][j] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     if (bbb[i - 1][j + 1] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     console.log("upper", i, j, numOfNeighbors);
-  //     return numOfNeighbors;
-  //   };
-  //   const checkLowerLevel = (i: number, j: number) => {
-  //     let numOfNeighbors = 0;
-  //     if (bbb[i + 1][j - 1] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     if (bbb[i + 1][j] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     if (bbb[i + 1][j + 1] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     console.log("lower", i, j, numOfNeighbors);
-  //     return numOfNeighbors;
-  //   };
-  //   const checkSameLevel = (i: number, j: number) => {
-  //     let numOfNeighbors = 0;
-  //     if (bbb[i][j - 1] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     if (bbb[i][j + 1] == 1) {
-  //       numOfNeighbors++;
-  //     }
-  //     console.log("same", i, j, numOfNeighbors);
-  //     return numOfNeighbors;
-  //   };
-  //   for (let i = 1; i < bbb.length - 1; i++) {
-  //     for (let j = 1; j < bbb[i].length - 1; j++) {
-  //       let cell = bbb[i][j];
-  //       let numOfNeighbors = 0;
-  //       //same level
-  //       numOfNeighbors += checkSameLevel(i, j);
-  //       //upper level
-  //       numOfNeighbors += checkUpperLevel(i, j);
-  //       //lower level
-  //       numOfNeighbors += checkLowerLevel(i, j);
-
-  //       if (numOfNeighbors == 3) {
-  //         bbb[i][j] = 1;
-  //       }
-  //       console.log(numOfNeighbors);
-  //     }
-  //   }
-  //   console.log(this.board);
-  //   return this;
-  // }
+  getAllNeighbors(x: number, y: number, board: any[]) {
+    let aliveNeighbors = 0;
+    for (let i = x - 1; i <= x + 1; i++) {
+      for (let j = y - 1; j <= y + 1; j++) {
+        if (i === x && j === y) continue;
+        if (board[i][j] === 1) aliveNeighbors++;
+      }
+    }
+    return aliveNeighbors;
+  }
 }
 
 describe("GOL", () => {
@@ -101,20 +50,14 @@ describe("GOL", () => {
     expect(game.getBoard()).toHaveLength(3);
   });
 
-  // it("should calculate if cell can live", () => {
-  //   const board = [
-  //     [0, 0, 0],
-  //     [0, 1, 1],
-  //     [0, 1, 0],
-  //   ];
-
-  //   const boardAfterTick = [
-  //     [0, 0, 0],
-  //     [0, 1, 1],
-  //     [0, 1, 1],
-  //   ];
-  //   game.createCustomBoard(board);
-  //   // game.tick();
-  //   expect(game.createNewCells().getBoard()).toBe(boardAfterTick);
-  // });
+  it("should calculate number o alive neighbors", () => {
+    const board = [
+      [0, 0, 0],
+      [0, 1, 1],
+      [0, 1, 0],
+    ];
+    game.createCustomBoard(board);
+    const nei = game.getAllNeighbors(1, 1, board);
+    expect(nei).toBe(2);
+  });
 });
