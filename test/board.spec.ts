@@ -1,7 +1,9 @@
 import { test } from "../src";
+import { Cell } from "./cell.spec";
 
 export class Board {
   board: number[][] = [];
+  startingBoard: number[][] = [];
 
   constructor() {}
 
@@ -36,6 +38,17 @@ export class Board {
     }
     return aliveNeighbors;
   }
+
+  tick() {
+    this.startingBoard = [...this.board];
+    this.board = this.board.map((row, i) => {
+      return row.map((col, j) => {
+        const n = this.getAllNeighbors(i, j, this.startingBoard);
+        const cell = new Cell(this.startingBoard[i][j], n).tick().getState();
+        return cell;
+      });
+    });
+  }
 }
 
 describe("GOL", () => {
@@ -61,5 +74,26 @@ describe("GOL", () => {
     game.createCustomBoard(board);
     const nei = game.getAllNeighbors(0, 0, board);
     expect(nei).toBe(1);
+  });
+
+  it("should calculate new board", () => {
+    const board = [
+      [0, 0, 0, 0, 0],
+      [0, 1, 1, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1],
+      [0, 0, 0, 1, 0],
+    ];
+    const boardAfterTick = [
+      [0, 0, 0, 0, 0],
+      [0, 1, 1, 0, 0],
+      [0, 1, 0, 1, 0],
+      [0, 0, 1, 1, 1],
+      [0, 0, 0, 1, 1],
+    ];
+    game.createCustomBoard(board);
+    game.tick();
+    console.dir(game.getBoard());
+    expect(game.getBoard()).toEqual(boardAfterTick);
   });
 });
