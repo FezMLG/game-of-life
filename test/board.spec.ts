@@ -28,6 +28,8 @@ export class Board {
     let aliveNeighbors = 0;
     for (let i = x - 1; i <= x + 1; i++) {
       for (let j = y - 1; j <= y + 1; j++) {
+        if (j - 1 < 0 || j + 1 > board.length) continue;
+        if (i - 1 < 0 || i + 1 > board.length) continue;
         if (i === x && j === y) continue;
         if (board[i][j] === 1) aliveNeighbors++;
       }
@@ -57,7 +59,7 @@ describe("GOL", () => {
       [0, 1, 0],
     ];
     game.createCustomBoard(board);
-    const nei = game.getAllNeighbors(1, 1, board);
-    expect(nei).toBe(2);
+    const nei = game.getAllNeighbors(0, 0, board);
+    expect(nei).toBe(1);
   });
 });
