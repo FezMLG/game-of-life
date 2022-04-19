@@ -19,7 +19,6 @@ class Cell {
       this.neighbors.filter((neighbor) => neighbor.state === 1).length === 2 &&
       this.state === 1
     ) {
-      this.state = 1;
     } else {
       this.state = 0;
     }
